@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Products - A. Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-color: #F5F3EE;
+            --dark-brown: #2C2A28;
+            --gold: #C6A75E;
+            --soft-beige: #E8DFC8;
+            --text: #1A1A1A;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background-color: var(--dark-brown);
+            color: var(--soft-beige);
+            text-align: center;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar {
+                font-size: 0.85rem;
+                padding: 10px 0;
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background-color: var(--bg-color);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            padding: 12px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .header-icon:hover {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            letter-spacing: 3px;
+            text-align: center;
+            justify-self: center;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--gold);
+            color: var(--white);
+            font-size: 0.65rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--dark-brown);
+            padding: 8px;
+            z-index: 1002;
+        }
+
+        /* ===== MOBILE NAVIGATION (SIDEBAR) ===== */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 42, 40, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 320px;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 999;
+            padding: 0;
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            overflow-y: auto;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        /* Sidebar Header Section */
+        .sidebar-header {
+            padding: 50px 30px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--soft-beige);
+            position: relative;
+            background: var(--bg-color);
+        }
+
+        .sidebar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            display: block;
+            line-height: 1;
+        }
+
+        /* New Tagline Style */
+        .sidebar-tagline {
+            font-size: 0.75rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-top: 10px;
+            display: block;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--dark-brown);
+            padding: 5px;
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+
+        .nav-close:hover {
+            transform: rotate(90deg);
+            color: var(--gold);
+        }
+
+        /* Vertical Center Line */
+        .sidebar-line {
+            position: absolute;
+            left: 50%;
+            top: 100%; /* Starts right after header */
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            transform: translateX(-50%);
+            height: calc(100% - 130px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-links li {
+            text-align: center;
+            margin: 8px 0;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+        }
+
+        /* Staggered animation for links */
+        .nav-menu.active .nav-links li:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(2) { transition-delay: 0.15s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(4) { transition-delay: 0.25s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(5) { transition-delay: 0.3s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(6) { transition-delay: 0.35s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(7) { transition-delay: 0.4s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(8) { transition-delay: 0.45s; opacity: 1; transform: translateX(0); }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--dark-brown);
+            position: relative;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--white);
+            background: var(--dark-brown);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(44, 42, 40, 0.2);
+        }
+
+        .nav-links a:hover::before {
+            content: 'A.';
+            position: absolute;
+            left: -25px;
+            color: var(--gold);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .nav-menu,
+            .nav-overlay,
+            .sidebar-line {
+                display: none !important;
+            }
+
+            .desktop-nav {
+                display: block;
+                background-color: var(--white);
+                border-top: 1px solid var(--soft-beige);
+                border-bottom: 1px solid var(--soft-beige);
+            }
+
+            .nav-container {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+                gap: 0;
+                padding: 0;
+            }
+
+            .nav-links li {
+                opacity: 1 !important;
+                transform: none !important;
+                margin: 0;
+            }
+
+            .nav-links a {
+                padding: 18px 25px;
+                font-size: 0.85rem;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                background: transparent;
+                min-width: auto;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                border-left: none;
+                border-bottom-color: var(--gold);
+                transform: none;
+                background: transparent;
+                color: var(--gold);
+                box-shadow: none;
+            }
+
+            .nav-links a:hover::before {
+                content: none;
+            }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                height: 85vh;
+                min-height: 600px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero {
+                height: 90vh;
+            }
+        }
+
+        .hero-slider {
+            position: relative;
+            height: 100%;
+        }
+
+        .hero-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 110%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--white);
+            z-index: 2;
+            width: 90%;
+            max-width: 700px;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 5px;
+            font-weight: 600;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            opacity: 0.95;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content h1 {
+                font-size: 3.5rem;
+                letter-spacing: 8px;
+            }
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-content h1 {
+                font-size: 5rem;
+                letter-spacing: 10px;
+            }
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 35px;
+            background-color: var(--gold);
+            color: var(--white);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 2px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        @media (min-width: 768px) {
+            .btn-primary {
+                padding: 18px 50px;
+                font-size: 0.9rem;
+            }
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 3;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--gold);
+            width: 25px;
+            border-radius: 5px;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .section {
+                padding: 80px 5%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .section {
+                padding: 100px 5%;
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: var(--dark-brown);
+            margin-bottom: 12px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--gold);
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+            .section-title p {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== CATEGORIES GRID ===== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+            }
+        }
+
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        @media (min-width: 768px) {
+            .category-card img {
+                height: 450px;
+            }
+        }
+
+        .category-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(44, 42, 40, 0.9), transparent);
+            padding: 25px 15px 15px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .category-overlay h3 {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .category-overlay span {
+            font-size: 0.8rem;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover .category-overlay span {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== PRODUCTS GRID ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+            }
+        }
+
+        .product-card {
+            background-color: var(--white);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid var(--soft-beige);
+            border-radius: 8px;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 2;
+            border-radius: 3px;
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        @media (min-width: 768px) {
+            .product-image {
+                height: 350px;
+            }
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-actions {
+            position: absolute;
+            bottom: -45px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.95);
+            transition: bottom 0.3s ease;
+        }
+
+        .product-card:hover .product-actions {
+            bottom: 0;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--dark-brown);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background-color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-info h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: var(--dark-brown);
+        }
+
+        .product-price {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .current-price {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .old-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 0.85rem;
+        }
+
+        /* ===== COLLECTION BANNER ===== */
+        .collection-banner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin: 60px auto;
+            max-width: 1400px;
+            padding: 0 20px;
+        }
+
+        @media (min-width: 768px) {
+            .collection-banner {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                padding: 0 5%;
+            }
+        }
+
+        .collection-item {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+            border-radius: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .collection-item {
+                height: 650px;
+            }
+        }
+
+        .collection-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .collection-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .collection-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(255,255,255,0.95);
+            padding: 30px 20px;
+            min-width: 220px;
+            border-radius: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .collection-content {
+                padding: 50px;
+                min-width: 300px;
+            }
+        }
+
+        .collection-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--dark-brown);
+        }
+
+        .collection-content p {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-section {
+            background-color: var(--soft-beige);
+            padding: 60px 20px;
+            
+        }
+
+        @media (min-width: 768px) {
+            .about-section {
+                padding: 100px 5%;
+            }
+        }
+
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+            
+        }
+
+        @media (min-width: 992px) {
+            .about-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 80px;
+                /* align-items: center; */
+            }
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 20px 20px 0 var(--gold);
+        }
+
+        .about-content h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--dark-brown);
+        }
+
+        .about-content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 18px;
+        }
+
+        .features-list {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 500px) {
+            .features-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--gold);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .feature-item strong {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .feature-item p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter {
+            background-color: var(--dark-brown);
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        @media (min-width: 768px) {
+            .newsletter {
+                padding: 80px 5%;
+            }
+        }
+
+        .newsletter h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .newsletter p {
+            margin-bottom: 30px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 500px) {
+            .newsletter-form {
+                flex-direction: row;
+                gap: 0;
+            }
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 1rem;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--white);
+            outline: none;
+            border-radius: 5px;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .newsletter-form button {
+            padding: 15px 30px;
+            background-color: var(--gold);
+            color: var(--white);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+        }
+
+        .newsletter-form button:hover {
+            background-color: var(--white);
+            color: var(--dark-brown);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background-color: var(--dark-brown);
+            color: var(--soft-beige);
+            padding: 50px 20px 25px;
+        }
+
+        @media (min-width: 768px) {
+            .footer {
+                padding: 80px 5% 30px;
+            }
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-container {
+                grid-template-columns: 2fr 1fr 1fr;
+                gap: 50px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-container {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-col h3 {
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .footer-col p {
+            line-height: 1.7;
+            opacity: 0.85;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--soft-beige);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .social-links a:hover {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            opacity: 0.85;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 25px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.85rem;
+            margin-top: 30px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* ===== LOADER ===== */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @media (min-width: 768px) {
+            .loader-content {
+                font-size: 4rem;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ===== UTILITY ===== */
+        .text-center { text-align: center; }
+        .mt-60 { margin-top: 60px; }
+        
+        @media (min-width: 768px) {
+            .mt-60 { margin-top: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">A.</div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Free Shipping on Orders Above Rs. 10,000 | Use Promcode for Discount: A. 10
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="header-icon" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <a href="index.html" class="logo">A.</a>
+            
+            <div class="header-right">
+                <button class="header-icon" aria-label="Account">
+                    <a href="login.html"><i class="fas fa-user"></i></a>
+                </button>
+                <button class="header-icon" aria-label="Cart">
+                    <i class="fas fa-shopping-bag"></i>
+                    <!-- <span class="cart-count">3</span> -->
+                </button>
+                <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation (Sidebar) -->
+    <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu" id="navMenu">
+        <!-- Sidebar Header Section -->
+        <div class="sidebar-header">
+            <button class="nav-close" onclick="toggleMenu()" aria-label="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+            <span class="sidebar-logo">A.</span>
+            <span class="sidebar-tagline">Different Stores in One Roof</span>
+            
+            <!-- Vertical Center Line -->
+            <div class="sidebar-line"></div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html" onclick="toggleMenu()">Home</a></li>
+            <li><a href="Store.html" onclick="toggleMenu()">Shop</a></li>
+            <li><a href="collection.html" onclick="toggleMenu()">Collections</a></li>
+            <li><a href="Product.html" onclick="toggleMenu()">All Products</a></li>
+            <!-- <li><a href="#women" onclick="toggleMenu()">Women</a></li>
+            <li><a href="#accessories" onclick="toggleMenu()">Accessories</a></li>
+            <li><a href="#sale" onclick="toggleMenu()">Sale</a></li> -->
+            <li><a href="contact.html" onclick="toggleMenu()">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Store.html">Store</a></li>
+                <li><a href="collection.html">Collections</a></li>
+                <li><a href="Product.html">All Products</a></li>
+                <!-- <li><a href="#accessories">Accessories</a></li> -->
+                <!-- <li><a href="#sale">Sale</a></li> -->
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-slider">
+            <div class="hero-slide active">
+                <img src="https://i.pinimg.com/1200x/ed/cd/03/edcd0390ae86cfab6bad1a8150aefb93.jpg" alt="Luxury Watches">
+                <div class="hero-content">
+                    <h1>More Products</h1>
+                    <!-- <p>Timeless elegance for every occasion</p>
+                    <a href="#shop" class="btn-primary">Shopping now</a> -->
+                </div>
+            </div>
+            <div class="hero-slide">
+                <img src="https://dnstore.pk/cdn/shop/collections/IMG-3611.png?v=1764946722&width=1500" alt="Premium Shoes">
+                <div class="hero-content">
+                    <h1>More Products</h1>
+                    <!-- <p>Step into style and comfort</p>
+                    <a href="#shop" class="btn-primary">Shopping now</a> -->
+                </div>
+            </div>
+            <div class="hero-slide">
+                <img src="https://i.pinimg.com/736x/2e/94/d2/2e94d2ec589024f4bfabf8736696ae15.jpg" alt="Men's Fashion">
+                <div class="hero-content">
+                    <h1>More Products</h1>
+                    <!-- <p>Premium pants & t-shirts collection</p>
+                    <a href="#shop" class="btn-primary">Shopping now</a> -->
+                </div>
+            </div>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlide(0)" role="button" tabindex="0"></span>
+            <span class="dot" onclick="currentSlide(1)" role="button" tabindex="0"></span>
+            <span class="dot" onclick="currentSlide(2)" role="button" tabindex="0"></span>
+        </div>
+    </section>
+
+    <!-- Categories Section 
+    <section class="section" id="shop">
+        <div class="section-title fade-in">
+            <h2>A. Store Collections</h2>
+            <p>Explore Our Collections</p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-card fade-in">
+                <img src="https://i.pinimg.com/736x/2e/94/d2/2e94d2ec589024f4bfabf8736696ae15.jpg" alt="Men">
+                <div class="category-overlay">
+                    <h3>Men</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+            <div class="category-card fade-in">
+                <img src="https://i.pinimg.com/736x/94/86/b8/9486b869130f10d3cffed7a91b2accad.jpg" alt="Women">
+                <div class="category-overlay">
+                    <h3>Women</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+            <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/files/87EEB43E-F4F3-4977-946E-8D0FB1B88A22.png?v=1769606935&width=1500" alt="Watches">
+                <div class="category-overlay">
+                    <h3>Men's Watches</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+            <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/files/8732760C-E7D0-41D6-B7CA-08B2A607D391.png?v=1767159676&width=533" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Men's Wallet</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+             <div class="category-card fade-in">
+                <img src="https://i.pinimg.com/1200x/23/0d/10/230d103f7ebfa996b3343e1ae49d433d.jpg" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Women Bags</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+             <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/collections/7CD18B99-9C36-46EA-A3F8-4B9D25A5273C.jpg?v=1748378559&width=1500" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Perfums</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+             <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/collections/A62BF37C-EA4C-4EBD-8C0D-1893956A18A5.jpg?v=1745009300&width=1500" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Women's Watches</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+             <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/files/CE97B476-E5CA-4C66-B89B-6E3631B5E368.jpg?v=1767185810&width=533" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Shoes</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+            <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/files/C10E5EF8-DA6B-403E-BED9-53B5AED405B2.png?v=1767277320&width=533" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Caps</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+
+            <div class="category-card fade-in">
+                <img src="https://dnstore.pk/cdn/shop/collections/610B7395-054F-4B1D-A573-87AF379F32CF.png?v=1767270147&width=1500" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Goggles</h3>
+                    <span>Shop Now →</span>
+                </div>
+            </div>
+        </div>
+    </section>-->
+
+    <!-- Featured Products -->
+    <section class="section" style="background-color: var(--white);">
+        <div class="section-title fade-in">
+            <h2>More Products</h2>
+            <p>Just for you</p>
+        </div>
+        
+        <div class="products-grid">
+            <div class="product-card fade-in">
+                <!-- <span class="product-badge">NEW</span> -->
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/3EA365D2-9FEE-40C9-8B72-93678D117FE1.jpg?v=1761320131&width=533" alt="Classic Leather Jacket">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Classic Leather Jacket</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 3,000</span>
+                        <span class="old-price">Rs. 5,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/43516712-A83F-4905-AA61-C9780A742322.jpg?v=1756197814&width=1946" alt="Luxury Watch">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Luxury Chronograph Watch</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 10,000</span>
+                         <span class="old-price">Rs. 15,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <!-- <span class="product-badge" style="background-color: #e74c3c;">SALE</span> -->
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/0BCB8745-A48D-446A-910A-04C013A286B7.png?v=1764940174&width=533" alt="Premium Sneakers">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Premium Sneakers</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 6,500</span>
+                        <span class="old-price">Rs. 9,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/CF99412F-14F9-4F7F-8309-2989B064F0E7.png?v=1771419916&width=533" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/D7447805-8093-44D8-AE90-DE4F1BF63F6B.jpg?v=1765982511&width=533" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/A5EF2E6C-9AFF-4345-9EFB-B44256F86D61.png?v=1767197827&width=533" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/3F950B72-E1D9-4411-A749-17E3C0A53845.jpg?v=1750026846&width=533" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/E7C3FA94-EB85-4D52-996D-AA702B6D516E.png?v=1772193906&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/3F13149B-456F-4C2C-ADD2-6B4DE46ECE5D.png?v=1767159285&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/207AD8BF-F1FC-4088-96C6-29DABF5088E3.png?v=1767159999&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/3FC0EA99-9057-4BE4-9F31-6E41CBDFC6B4.jpg?v=1749664969&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/C7A3326C-247F-4073-AC54-C71491955C99.png?v=1767184521&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/B9763FB9-DBC3-4674-9313-CF61A511CAAD.jpg?v=1748380135&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://i.pinimg.com/736x/0f/10/8c/0f108ca44284b2d100da12bbdceecaf4.jpg" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/FF1B9E62-7CB1-4907-B895-D0DF497F5AA3.png?v=1767270626&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/153101CE-BEE4-417B-8A7B-B7AF78BACFDE.png?v=1767277952&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/966812AC-2F1A-4714-B6DC-F38F2FFD05FB.jpg?v=1764944909&width=533" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/8F99FF1C-2309-46A1-95A2-4C97E4925803.png?v=1767202877&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/976EF46D-6278-4417-8074-DE935252A653.png?v=1751119081&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="https://dnstore.pk/cdn/shop/files/D4005F6E-75AE-46EB-93A6-15DE41FB17E9.jpg?v=1754467652&width=823" alt="Designer Perfume">
+                    <!-- <div class="product-actions">
+                        <button class="action-btn" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></button>
+                        <button class="action-btn" aria-label="Quick view"><i class="fas fa-eye"></i></button>
+                    </div> -->
+                </div>
+                <div class="product-info">
+                    <h3>Designer Perfume</h3>
+                    <div class="product-price">
+                        <span class="current-price">Rs. 5,000</span>
+                         <span class="old-price">Rs. 10,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div class="text-center mt-60">
+            <a href="#" class="btn-secondary btn-primary">View All Products</a>
+        </div> -->
+    </section>
+
+    <!-- Collection Banner -->
+    <div class="collection-banner">
+        <div class="collection-item fade-in">
+            <img src="https://i.pinimg.com/736x/2e/94/d2/2e94d2ec589024f4bfabf8736696ae15.jpg" alt="Men's Collection">
+            <div class="collection-content">
+                <h3>MEN'S COLLECTION</h3>
+                <p>Premium pants & t-shirts</p>
+                <a href="#" class="btn-primary">Shop Men</a>
+            </div>
+        </div>
+        <div class="collection-item fade-in">
+            <img src="https://i.pinimg.com/736x/94/86/b8/9486b869130f10d3cffed7a91b2accad.jpg" alt="Women's Collection">
+            <div class="collection-content">
+                <h3>WOMEN'S COLLECTION</h3>
+                <p>Embrace elegance</p>
+                <a href="#" class="btn-primary">Shop Women</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <!-- <div class="about-image fade-in">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop" alt="About A. Store">
+            </div> -->
+            <div class="about-content fade-in">
+                <h2>Welcome to A. Store</h2>
+                <p>We take pride in being one of Pakistan's most trusted brands, offering most challenging prices without compromising on quality. Whether you're shopping for the latest watches, tech products, or combo deals, we promise value for every rupee.</p>
+                <p>Join thousands of happy customers who choose A. for premium products at challenging prices. Your satisfaction is our priority!</p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                        <div>
+                            <strong>Free Shipping</strong>
+                            <p>On orders above Rs. 10,000</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-undo"></i></div>
+                        <div>
+                            <strong>Easy Returns</strong>
+                            <p>30-day return policy</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <strong>Secure Payment</strong>
+                            <p>100% secure checkout</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                        <div>
+                            <strong>24/7 Support</strong>
+                            <p>Dedicated support team</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <h2>Join Our Newsletter</h2>
+        <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+        <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+            <input type="email" placeholder="Enter your email address" required aria-label="Email address">
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>A. STORE</h3>
+                <p>Your one-stop destination for premium fashion and lifestyle products. We bring you the best quality products at competitive prices.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#shop">Shop</a></li>
+                    <li><a href="#collections">Collections</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Customer Service</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Size Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> 123 Fashion Street, Karachi</li>
+                    <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +92 300 1234567</li>
+                    <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@astore.pk</li>
+                    <li><i class="fas fa-clock" style="margin-right: 8px;"></i> Mon-Sat: 10AM-8PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 A. Store. All Rights Reserved. Designed with <i class="fas fa-heart" style="color: var(--gold);"></i> in Pakistan</p>
+        </div>
+    </footer>
+
+    <script>
+        // Remove loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 800);
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Hero Slider
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                dots[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function currentSlide(index) {
+            currentIndex = index;
+            showSlide(currentIndex);
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        // Auto slide every 5 seconds
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // Pause slider on hover
+        const hero = document.querySelector('.hero');
+        hero.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        hero.addEventListener('mouseleave', () => {
+            slideInterval = setInterval(nextSlide, 5000);
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const nav = document.getElementById('navMenu');
+            const overlay = document.getElementById('navOverlay');
+            nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const nav = document.getElementById('navMenu');
+                if (nav.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Newsletter Subscribe
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            alert('Thank you for subscribing with ' + email + '!');
+            e.target.reset();
+        }
+
+        // Add to Cart Animation
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.1)';
+                }, 100);
+                
+                const cartCount = document.querySelector('.cart-count');
+                let count = parseInt(cartCount.textContent);
+                cartCount.textContent = count + 1;
+                
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+
+        // Smooth Scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    // Close mobile menu if open
+                    const nav = document.getElementById('navMenu');
+                    if (nav.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                    
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Keyboard navigation for slider dots
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const index = Array.from(dots).indexOf(dot);
+                    currentSlide(index);
+                }
+            });
+        });
+
+        // Prevent zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - A. Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-color: #F5F3EE;
+            --dark-brown: #2C2A28;
+            --gold: #C6A75E;
+            --soft-beige: #E8DFC8;
+            --text: #1A1A1A;
+            --white: #FFFFFF;
+            --grey-light: #f4f4f4;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            overflow-x: hidden;
+            font-size: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        input {
+            font-family: inherit;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background-color: var(--dark-brown);
+            color: var(--soft-beige);
+            text-align: center;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background-color: var(--bg-color);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .header-icon:hover {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            letter-spacing: 3px;
+            text-align: center;
+            justify-self: center;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--dark-brown);
+            padding: 8px;
+            z-index: 1002;
+        }
+
+        /* ===== SIDEBAR NAVIGATION ===== */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 42, 40, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 320px;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 999;
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            overflow-y: auto;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 50px 30px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--soft-beige);
+            position: relative;
+            background: var(--bg-color);
+        }
+
+        .sidebar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            display: block;
+            line-height: 1;
+        }
+
+        .sidebar-tagline {
+            font-size: 0.75rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-top: 10px;
+            display: block;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--dark-brown);
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .sidebar-line {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            transform: translateX(-50%);
+            height: calc(100% - 130px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-links li {
+            text-align: center;
+            margin: 8px 0;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+        }
+
+        .nav-menu.active .nav-links li:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(2) { transition-delay: 0.15s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(4) { transition-delay: 0.25s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(5) { transition-delay: 0.3s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(6) { transition-delay: 0.35s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(7) { transition-delay: 0.4s; opacity: 1; transform: translateX(0); }
+        .nav-menu.active .nav-links li:nth-child(8) { transition-delay: 0.45s; opacity: 1; transform: translateX(0); }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--dark-brown);
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white);
+            background: var(--dark-brown);
+            transform: scale(1.05);
+        }
+
+        /* Desktop Nav */
+        .desktop-nav {
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .mobile-menu-btn { display: none; }
+            .nav-menu, .nav-overlay, .sidebar-line { display: none !important; }
+            .desktop-nav {
+                display: block;
+                background-color: var(--white);
+                border-top: 1px solid var(--soft-beige);
+                border-bottom: 1px solid var(--soft-beige);
+            }
+            .nav-container {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                padding: 0 20px;
+            }
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+                gap: 0;
+                padding: 0;
+            }
+            .nav-links li { opacity: 1 !important; transform: none !important; margin: 0; }
+            .nav-links a {
+                padding: 18px 25px;
+                font-size: 0.85rem;
+                border-bottom: 3px solid transparent;
+                background: transparent;
+                min-width: auto;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .nav-links a:hover, .nav-links a.active {
+                border-bottom-color: var(--gold);
+                transform: none;
+                background: transparent;
+                color: var(--gold);
+            }
+            .nav-links a:hover::before { content: none; }
+        }
+
+        /* ===== LOGIN SECTION ===== */
+        .login-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=1080&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 243, 238, 0.85); /* Overlay with bg-color */
+            z-index: 1;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 450px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            text-align: center;
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--soft-beige);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #999;
+            background: transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--dark-brown);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark-brown);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid var(--soft-beige);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: var(--bg-color);
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(198, 167, 94, 0.1);
+        }
+
+        .form-input:focus + i {
+            color: var(--gold);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: var(--gold);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--dark-brown);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(198, 167, 94, 0.3);
+        }
+
+        .divider {
+            margin: 25px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--soft-beige);
+        }
+
+        .divider span {
+            position: relative;
+            background-color: var(--white);
+            padding: 0 15px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--soft-beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+            background-color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background-color: var(--dark-brown);
+            color: var(--white);
+            border-color: var(--dark-brown);
+            transform: translateY(-3px);
+        }
+
+        .social-btn.google:hover {
+            background-color: #DB4437;
+            border-color: #DB4437;
+        }
+
+        .social-btn.facebook:hover {
+            background-color: #4267B2;
+            border-color: #4267B2;
+        }
+
+        /* Form Visibility Logic */
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background-color: var(--dark-brown);
+            color: var(--soft-beige);
+            padding: 40px 20px 20px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-container {
+                grid-template-columns: 2fr 1fr 1fr;
+                text-align: left;
+            }
+        }
+
+        .footer-col h3 {
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .footer-col p {
+            line-height: 1.7;
+            opacity: 0.85;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .social-links {
+                justify-content: flex-start;
+            }
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            border: 1px solid var(--soft-beige);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .social-links a:hover {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            opacity: 0.85;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.8rem;
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            .login-logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Free Shipping on Orders Above Rs. 10,000 | Code: AFIRST20
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="header-icon"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <a href="index.html" class="logo">A.</a>
+            
+            <div class="header-right">
+                <button class="header-icon">
+                    <a href="login.html"><i class="fas fa-user"></i></a>
+                </button>
+                <!-- <button class="header-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </button> -->
+                <button class="mobile-menu-btn" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation (Sidebar) -->
+    <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu" id="navMenu">
+        <div class="sidebar-header">
+            <button class="nav-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+            <span class="sidebar-logo">A.</span>
+            <span class="sidebar-tagline">Different Stores in One Roof</span>
+            <div class="sidebar-line"></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="collection.html">Collections</a></li>
+            <li><a href="Product.html">All Products</a></li>
+            <!-- <li><a href="#">Women</a></li>
+            <li><a href="#">Accessories</a></li> -->
+            <li><a href="contact.html">Contact</a></li>
+            <!-- <li><a href="#" class="active">Login</a></li> -->
+        </ul>
+    </nav>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Store.html">Store</a></li>
+                <li><a href="collection.html">Collections</a></li>
+                <li><a href="Product.html">All Products</a></li>
+                <!-- <li><a href="#">Women</a></li>
+                <li><a href="#">Accessories</a></li>-->
+                <li><a href="contact.html">Contact</a></li> 
+                <!-- <li><a href="#" class="active">Login</a></li> -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <span class="login-logo">A.</span>
+            <p class="login-subtitle">Welcome back to A. Store</p>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('register')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" class="form-input" placeholder="Enter your email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" placeholder="Enter your password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign In</button>
+
+                <div class="divider">
+                    <span>Or continue with</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn google"><i class="fab fa-google"></i></button>
+                    <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-input" placeholder="Enter your full name" required>
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" class="form-input" placeholder="Enter your email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" placeholder="Create a password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" placeholder="Confirm your password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" required> I agree to Terms & Conditions
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">Create Account</button>
+
+                <div class="divider">
+                    <span>Or sign up with</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn google"><i class="fab fa-google"></i></button>
+                    <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>A. STORE</h3>
+                <p>Your one-stop destination for premium fashion and lifestyle products. We bring you the best quality products at competitive prices.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Shop</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> 123 Fashion Street, Karachi</li>
+                    <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +92 300 1234567</li>
+                    <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@astore.pk</li>
+                    <li><i class="fas fa-clock" style="margin-right: 8px;"></i> Mon-Sat: 10AM-8PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 A. Store. All Rights Reserved. Designed with <i class="fas fa-heart" style="color: var(--gold);"></i> in Pakistan</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const nav = document.getElementById('navMenu');
+            const overlay = document.getElementById('navOverlay');
+            nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const tabs = document.querySelectorAll('.tab-btn');
+
+            if (tabName === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            } else {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        // Form Submission Prevention (Demo)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('.btn-submit');
+                const originalText = btn.innerText;
+                
+                btn.innerText = 'Processing...';
+                btn.style.opacity = '0.7';
+                
+                setTimeout(() => {
+                    alert('Form submitted successfully! (This is a demo)');
+                    btn.innerText = originalText;
+                    btn.style.opacity = '1';
+                    form.reset();
+                }, 1500);
+            });
+        });
+
+        // Social Button Click
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const platform = btn.classList.contains('google') ? 'Google' : 'Facebook';
+                alert(`Redirecting to ${platform} Login...`);
+            });
+        });
+    </script>
+</body>
+</html>
